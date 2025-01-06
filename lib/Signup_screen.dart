@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
-
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
+class LoginScreen extends StatelessWidget {
+  LoginScreen({super.key});
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  void _loginForm(){
+    if(_formkey.currentState!.validate()){}
+  }
+  String? _validatePhoneNumber(value){
+    if(value!.isEmpty){
+      return 'please enter a Phone Number';
+    }
+    if(value.length != 11){
+      return 'Please enter a 11 digit Password';
+    }
+    return  null;
+  }
   @override
   Widget build(BuildContext context) {
     double w= MediaQuery.of(context).size.width;
@@ -49,13 +56,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: BoxDecoration(
                       border: Border( bottom: BorderSide(color: Colors.white,) )
                   ),
-                  child: TextField(
+                  child: TextFormField(
                       decoration: InputDecoration(
                         suffixIcon: Icon(Icons.alternate_email),
                         prefixIcon: Icon(Icons.phone_android_rounded),
                         hintText: "Phone Number",
                         hintStyle: TextStyle(color: Colors.black),
-                      )
+                      ),
+                    validator: _validatePhoneNumber
                   ),
                 ),
                 SizedBox(height: 20,),
@@ -74,9 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 SizedBox(height: 10,),
                 ElevatedButton(
-                  onPressed: () {
-                    // Handle sign-up logic
-                  },
+                  onPressed: _loginForm,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
                     minimumSize: const Size(double.infinity ,50,),
@@ -92,48 +98,47 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 SizedBox(height: 20,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 1,
-                      width: 140,
-                      color: Colors.grey,
+                const Row(
+                  children: const [
+                    Expanded(child: Divider()),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text("OR"),
                     ),
-                    Text(
-                      "OR",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Container(
-                      height: 1,
-                      width: 140,
-                      color: Colors.grey,
-                    ),
+                    Expanded(child: Divider()),
                   ],
                 ),
                 SizedBox(height: 30,),
-                Container(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Handle sign-up logic
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white70,
-                      minimumSize: const Size(double.infinity ,50,),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                                "img/google_logo.png"
+                            ),
+                            alignment: Alignment.topLeft,
+                          )
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Handle sign-up logic
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white70,
+                          minimumSize: const Size(double.infinity ,50,),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child:  Text('Login with Google',
+                            style: TextStyle(
+                              color: Colors.black,
+                            )
+                        ),
                       ),
                     ),
-                    child:  Text('Login with Google',
-                        style: TextStyle(
-                          color: Colors.black,
-                        )
-                    ),
-                  ),
+                  ],
                 ),
                 const SizedBox(height: 20,),
                 // Login link
