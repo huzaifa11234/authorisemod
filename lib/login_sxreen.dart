@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pw_validator/flutter_pw_validator.dart';
-
 import 'forgot_passsword.dart';
 import 'register_page.dart';
-
 
 class LoginPage extends StatelessWidget {
    LoginPage({super.key});
@@ -22,16 +19,24 @@ String? _validateEmail(value){
   }
   return  null;
 }
-   String? _validatePassword(value){
-     if(value!.isEmpty){
-       return 'please enter a Password';
+   String? _validatePassword(String? value) {
+     if (value == null || value.isEmpty) {
+       return 'Please enter a password';
      }
-     if(value.length != 8){
-       return 'Please enter a 8 digit Password';
+     if (value.length < 8) {
+       return 'Password must be at least 8 characters long';
      }
-     return  null;
+     // Check for at least one special character
+     if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
+       return 'Password must include at least one special character';
      }
-  @override
+     // Check for at least two uppercase letters
+     if (value.replaceAll(RegExp(r'[^A-Z]'), '').length < 2) {
+       return 'Password must include at least two uppercase letters';
+     }
+     return null;
+   }
+   @override
   Widget build(BuildContext context) {
 
     double w= MediaQuery.of(context).size.width;
@@ -50,11 +55,11 @@ String? _validateEmail(value){
                   image: AssetImage(
                     "img/login.jpg"
                   ),
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
                 )
               ),
             ),
-            SizedBox(height: 5,),
+            SizedBox(height: 10,),
             Container(
               margin: const EdgeInsets.only(left: 20, right: 20),
               width: w,
@@ -62,65 +67,88 @@ String? _validateEmail(value){
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                       Text(
-                        "Login",
+                        "  Login",
                             style:TextStyle(
-                              fontSize: 30,
+                              fontSize: 40,
                               fontWeight: FontWeight.bold,
                             )
                       ),
-                  SizedBox(height: 15,),
-                 Container(
-                    padding: EdgeInsets.only(left: 20),
-                    width: 300,
-                    decoration: BoxDecoration(
-                        border: Border( bottom: BorderSide(color: Colors.white,) )
-                    ),
-                   child: TextFormField(
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.alternate_email),
-                        suffixIcon: Icon(Icons.phone_android_rounded),
-                        hintText: "Email ID",
-                            hintStyle: TextStyle(color: Colors.black),
-
-                      ),
-                          validator:_validateEmail
-                    ),
-
-                    ),
-
                   SizedBox(height: 20,),
-                  Column(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(left: 20),
-                        width: 300,
-                        decoration: BoxDecoration(
-                            border: Border( bottom: BorderSide(color: Colors.white,) )
-
-                        ),
-                        child: TextFormField(
-                            decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.lock),
-                              suffixIcon: Icon(Icons.remove_red_eye),
-                              hintText: "Password",
-                              hintStyle: TextStyle(color: Colors.black),
-                            ),
-                            validator: _validatePassword,
-                          controller: _controller,
-                        ),
+                  Container(
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: Colors.white),
                       ),
-                      FlutterPwValidator(
-                        uppercaseCharCount: 2,
-                          specialCharCount: 1,
-                          normalCharCount: 3,
-                          width: 50,
-                          height: 50,
-                          minLength: 8,
-                          onSuccess: (){},
-                          controller: _controller)
-                    ],
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.alternate_email,
+                          color: Colors.grey, // Set icon color if needed
+                        ),
+                        SizedBox(width: 10), // Space between the icon and the text field
+                        Expanded(
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              suffixIcon: Icon(
+                                Icons.phone_android_rounded,
+                                color: Colors.grey, // Set icon color if needed
+                              ),
+                              hintText: "Email ID",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            style: TextStyle(
+                              color: Colors.black, // Set text color
+                            ),
+                            validator: _validateEmail,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(height: 20,),
+                  Container(
+                    padding: EdgeInsets.only(left: 20,right: 20),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: Colors.white),
+                      ),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.lock_outline_rounded,
+                          color: Colors.grey, // Set icon color if needed
+                        ),
+                        SizedBox(width: 10), // Space between the icon and the text field
+                        Expanded(
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              suffixIcon: Icon(
+                                Icons.remove_red_eye_outlined,
+                                color: Colors.grey, // Set icon color if needed
+                              ),
+                              hintText: "Password",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            style: TextStyle(
+                              color: Colors.black, // Set text color
+                            ),
+                            validator: _validatePassword,
+                            controller: _controller,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 25,),
                   InkWell(
                     onTap: (){
                       Navigator.push(context,
@@ -129,11 +157,13 @@ String? _validateEmail(value){
                     },
                     child: Row(
                       children: [
-                        Expanded(child: Container()),
+                        Expanded(child: Container(
+                          padding: EdgeInsets.only(right: 15),
+                        )),
                         Text(
-                          "Forgot password?",
+                          "Forgot password?    ",
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Colors.blueAccent,
                           ),
@@ -141,64 +171,70 @@ String? _validateEmail(value){
                       ],
                     ),
                   ),
-                  SizedBox(height: 10,),
-                  ElevatedButton(
-                    onPressed: _loginForm,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
-                      minimumSize: const Size(double.infinity ,50,),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-
-                    child:  Text('Login',
-                        style: TextStyle(
-                          color: Colors.white,
-                        )
-                    ),
-                  ),
-                  SizedBox(height: 20,),
-                  const Row(
-                    children: const [
-                      Expanded(child: Divider()),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Text("OR"),
-                      ),
-                      Expanded(child: Divider()),
-                    ],
-                  ),
-                  SizedBox(height: 30,),
+                  SizedBox(height: 15,),
                   Container(
-                    decoration: BoxDecoration(
-                      borderRadius: null,
-                        image: DecorationImage(
-                          image: AssetImage(
-                              "img/google_logo.png"
-                          ),
-                          alignment: Alignment.topLeft,
-                        )
-                    ),
+                    padding: EdgeInsets.only(left: 20,right: 20),
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Handle sign-up logic
-                      },
+                      onPressed: _loginForm,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white70,
+                        backgroundColor: Colors.blueAccent,
                         minimumSize: const Size(double.infinity ,50,),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child:  Text('Login with Google',
+
+                      child:  Text('Login',
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Colors.white,
+                            fontSize: 18,
                           )
                       ),
                     ),
                   ),
                   SizedBox(height: 20,),
+                   Container(
+                     padding: EdgeInsets.only(left: 20,right: 15),
+                     child: Row(
+                      children: const [
+                        Expanded(child: Divider()),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Text("OR",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),),
+                        ),
+                        Expanded(child: Divider()),
+                      ],
+                     ),
+                   ),
+                  SizedBox(height: 35,),
+              Container(
+                margin: const EdgeInsets.only(left: 50, right: 30),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("img/google_logo.png"),
+                    alignment: Alignment.bottomLeft,
+                     fit: BoxFit.contain,
+                  ),
+                ),
+
+                child:  Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                   children: [
+                     Text(
+                        'Login with Google',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                        ),
+                      ),
+            ]
+                ),
+                 ),
+              SizedBox(height: 50,),
                   // Login link
                   InkWell(
                     onTap: (){
@@ -216,14 +252,14 @@ String? _validateEmail(value){
                               text: 'New to the App?',
                               style: TextStyle(
                                 color: Colors.grey,
-                                fontSize: 15,
+                                fontSize: 20,
                               ),
                               children: [
                                 TextSpan(
-                                  text: 'Register',
+                                  text: ' Register',
                                   style: TextStyle(
                                     color: Colors.blueAccent,
-                                    fontSize: 15,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.bold,
 
                                   ),
@@ -243,7 +279,6 @@ String? _validateEmail(value){
     );
   }
 }
-
 
 
 

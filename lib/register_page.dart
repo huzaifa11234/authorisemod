@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 
 import 'login_sxreen.dart';
 
@@ -20,15 +19,23 @@ class RegisterPage extends StatelessWidget {
     }
     return  null;
   }
-  String? _validatePassword(value){
-    if(value!.isEmpty){
-      return 'please enter a Password';
-    }
-    if(value.length != 8){
-      return 'Please enter a 8 digit Password';
-    }
-    return  null;
-  }
+   String? _validatePassword(String? value) {
+     if (value == null || value.isEmpty) {
+       return 'Please enter a password';
+     }
+     if (value.length < 8) {
+       return 'Password must be at least 8 characters long';
+     }
+     // Check for at least one special character
+     if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
+       return 'Password must include at least one special character';
+     }
+     // Check for at least two uppercase letters
+     if (value.replaceAll(RegExp(r'[^A-Z]'), '').length < 2) {
+       return 'Password must include at least two uppercase letters';
+     }
+     return null;
+   }
   @override
   Widget build(BuildContext context) {
     double w= MediaQuery.of(context).size.width;
@@ -40,6 +47,7 @@ class RegisterPage extends StatelessWidget {
         child: Column(
           children: [
             Container(
+              margin: const EdgeInsets.only(left: 20, right: 20),
               width: w,
               height: h*0.4,
               decoration: const BoxDecoration(
@@ -47,149 +55,171 @@ class RegisterPage extends StatelessWidget {
                     image: AssetImage(
                         "img/register.jpg"
                     ),
-                    fit: BoxFit.cover,
-                  )
+                  ),
               ),
             ),
-            const SizedBox(height: 5,),
+            const SizedBox(height: 20,),
             Container(
-              margin: const EdgeInsets.only(left: 20, right: 20),
-              width: w,
+              padding: EdgeInsets.only(left: 20, right: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                      "Register",
+                      "  Register",
                       style:TextStyle(
-                        fontSize: 30,
+                        fontSize: 42,
                         fontWeight: FontWeight.bold,
                       )
                   ),
-                  const SizedBox(height: 15,),
+                   SizedBox(height:20,),
                   Container(
-                    padding: const EdgeInsets.only(left: 25),
-                    width: 300,
-                    decoration: const BoxDecoration(
-                        border: Border( bottom: BorderSide(color: Colors.white,) )
-
-                    ),
-                    child:  TextFormField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.alternate_email),
-                          hintText: "Email ID",
-                          hintStyle: TextStyle(color: Colors.black),
-                        ),
-                      validator: _validateEmail,
-                    ),
-                  ),
-                  const SizedBox(height: 20,),
-                  Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(left: 25),
-                        width: 300,
-                        decoration: const BoxDecoration(
-                            border: Border( bottom: BorderSide(color: Colors.white,) )
-
-                        ),
-                        child:  TextFormField(
-                            decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.lock),
-                              suffixIcon: Icon(Icons.remove_red_eye),
-                              hintText: "Password",
-                              hintStyle: TextStyle(color: Colors.black),
-                            ),
-                          validator: _validateEmail,
-                          controller: _controller,
-                        ),
+                    padding: EdgeInsets.only(left: 20, right: 15),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: Colors.white),
                       ),
-                      Row(
-                        children: [
-                          FlutterPwValidator(
-                              uppercaseCharCount: 2, specialCharCount: 1, normalCharCount: 3, width: 50, height: 50, minLength: 8, onSuccess: (){}, controller: _controller),
-                        ],
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 20,),
-                  Container(
-                        margin: const EdgeInsets.only(left: 20, right: 20),
-                         width: w,
-                          child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                       Text(
-                          "By signing up, you agree to our Terms & conditions and Privacy Policy",
-                      style:TextStyle(
-                    fontSize: 14,
-                     color: Colors.grey,
-           )
-           ),
-                        SizedBox(height: 20,),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LoginPage())
-                      );
-                      ElevatedButton(
-                        onPressed: _SignUpForm,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blueAccent,
-                          minimumSize: const Size(double.infinity, 50,),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                        Icon(
+                          Icons.alternate_email,
+                          color: Colors.grey, // Set icon color if needed
+                        ),
+                        SizedBox(width: 10), // Space between the icon and the text field
+                        Expanded(
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              hintText: "Email ID",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 22,
+                              ),
+                            ),
+                            style: TextStyle(
+                              color: Colors.black, // Set text color
+                            ),
+                            validator: _validateEmail,
                           ),
                         ),
-
-                        child: Text('Sign Up',
-                            style: TextStyle(
-                              color: Colors.white,
-                            )
-                        ),
-                      );
-                    }
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 20,),
-                  // Login link
-                  InkWell(onTap: (){
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LoginPage())
-                    );
-                  },
-                    child: Container(
-                      margin: const EdgeInsets.only(left: 20, right: 20),
-                      width: w,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          RichText(text: TextSpan(
-                            text: 'joined us before?',
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 15,
-                            ),
-                              children: [
-                              TextSpan(
-                              text: 'Login',
-                              style: TextStyle(
-                                color: Colors.blueAccent,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-
-                              ),
-                              )
-                              ]
-                          )),
-                        ],
+                  Container(
+                    padding: EdgeInsets.only(left: 20,right: 20),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: Colors.white),
                       ),
                     ),
-                  )
-                    ]
-                  )
-            )
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.lock_outline_rounded,
+                          color: Colors.grey, // Set icon color if needed
+                        ),
+                        SizedBox(width: 10), // Space between the icon and the text field
+                        Expanded(
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              suffixIcon: Icon(
+                                Icons.remove_red_eye_outlined,
+                                color: Colors.grey, // Set icon color if needed
+                              ),
+                              hintText: "Password",
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 22,
+                              ),
+                            ),
+                            style: TextStyle(
+                              color: Colors.black, // Set text color
+                            ),
+                            validator: _validatePassword,
+                            controller: _controller,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
+            SizedBox(height: 35,),
+            Container(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                margin: const EdgeInsets.only(left: 20, right: 20),
+                width: w,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          "By signing up, you agree to our Terms &      conditions and Privacy Policy",
+                          style:TextStyle(
+                            fontSize: 22,
+                            color: Colors.grey,
+                          )
+                      ),
+                      ]
+                )
+            ),
+                      SizedBox(height: 27,),
+
+                            Container(
+                              padding: EdgeInsets.only(left: 20, right: 20),
+                              margin: const EdgeInsets.only(left: 20, right: 20),
+                              child: ElevatedButton(
+                                onPressed: _SignUpForm,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blueAccent,
+                                  minimumSize: const Size(double.infinity, 50,),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+
+                                child: Text('Sign Up',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 22
+                                    )
+                                ),
+                              ),
+                            ),
+
+        SizedBox(height: 30,),
+        InkWell(
+          onTap: (){
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => LoginPage())
+            );
+          },
+          child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            RichText(text: TextSpan(
+                text: 'joined us before?',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 20,
+                ),
+                children: [
+                  TextSpan(
+                    text: ' Login',
+                    style: TextStyle(
+                      color: Colors.blueAccent,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+
+                    ),
+                  )
+                ]
+            )),
+          ],
+                ),
+        ),
           ],
         ),
       ),

@@ -23,6 +23,7 @@ class ForgotPasssword extends StatelessWidget {
     double w= MediaQuery.of(context).size.width;
     double h=MediaQuery.of(context).size.height;
     return  Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: Icon(Icons.arrow_back),
@@ -31,7 +32,7 @@ class ForgotPasssword extends StatelessWidget {
       Form(
         key: _formkey,
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(10.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -39,7 +40,7 @@ class ForgotPasssword extends StatelessWidget {
               // Illustration Image
               Container(
                 width: w,
-                height: h*0.25,
+                height: h*0.4,
                 decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(
@@ -52,23 +53,23 @@ class ForgotPasssword extends StatelessWidget {
               SizedBox(height: 15),
               // Title
           Container(
-             margin: const EdgeInsets.only(left: 10, right: 10),
+             margin: const EdgeInsets.only(left: 50, right: 30),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                 Text(
-                     "Forgot Password?",
+                     "Forgot               Password?",
                    style:TextStyle(
                    fontSize: 45,
                    fontWeight: FontWeight.bold,
                )
                 ),
-              SizedBox(height: 7),
+              SizedBox(height: 10),
               // Subtitle
                   Text(
-                    "Don't worry! It happens. Please enter the email associated with the account.",
+                    "Don't worry! It happens. Please enter the      address associated with the account.",
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 22,
                       color: Colors.grey[600],
                     ),
                     textAlign: TextAlign.start,
@@ -76,17 +77,29 @@ class ForgotPasssword extends StatelessWidget {
               SizedBox(height: 15),
               // Email Input Field
                   Container(
-                    padding: EdgeInsets.only(left: 15,right: 9),
-                    width: 300,
                     decoration: BoxDecoration(
-                        border: Border( bottom: BorderSide(color: Colors.white,) )
+                      border: Border(
+                        bottom: BorderSide(color: Colors.white),
+                      ),
                     ),
-                    child: TextFormField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.alternate_email),
-                          hintStyle: TextStyle(color: Colors.black),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.alternate_email,
+                          color: Colors.grey, // Set icon color if needed
                         ),
-                      validator: _validateEmail,
+                        SizedBox(width: 10), // Space between the icon and the text field
+                        Expanded(
+                          child: TextFormField(
+
+                            style: TextStyle(
+                              color: Colors.black, // Set text color
+                            ),
+                            validator: _validateEmail,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
               SizedBox(height: 30),
